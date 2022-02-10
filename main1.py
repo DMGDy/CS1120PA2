@@ -19,9 +19,9 @@ def find_path(starting_pos, dest_pos):
     for x in range(n):
         for y in range(n):
             total += int(Map[x][y][0])
-    if total != n*n - 1:
+    if total != 64:
         try:
-            if weight_map[i_s - 1][j_s][0] != -1 and (i_s - 1) <= n - 1 and (i_s - 1) >= 0 and Map[i_s -1][j_s][0] != 1:
+            if weight_map[i_s - 1][j_s][0] != -1 and (i_s - 1) >= 0 and (i_s - 1) <= n -1 and weight_map[i_s-1][j_s][0] > weight:
                 #after weight map 
                 weightadder()
                 i_s -= 1;
@@ -36,7 +36,7 @@ def find_path(starting_pos, dest_pos):
         except IndexError:
             #move right
             try:
-                if weight_map[i_s][j_s + 1][0] != -1 and (j_s + 1) <= n - 1 and (j_s + 1) >= 0 and Map[i_s][j_s + 1][0] != 1:
+                if weight_map[i_s][j_s + 1][0] != -1 and (j_s + 1) <= n - 1 and (j_s + 1) >= 0 and weight_map[i_s][j_s + 1][0] > weight + 1:
                     weightadder()
                     j_s += 1;
                     for row in weight_map:
@@ -50,7 +50,7 @@ def find_path(starting_pos, dest_pos):
                #move down
             except IndexError:
                 try:
-                    if weight_map[i_s + 1][j_s][0] != -1 and (i_s  + 1) <= n - 1 and (i_s + 1) >= 0 and Map[i_s + 1][j_s][0] != 1:
+                    if weight_map[i_s + 1][j_s][0] != -1 and (i_s  + 1) <= n - 1 and (i_s + 1) >= 0 and weight_map[i_s + 1][j_s][0] > weight + 1:
                         weightadder()
                         i_s += 1
                         for row in weight_map:
@@ -62,7 +62,7 @@ def find_path(starting_pos, dest_pos):
                         raise IndexError
                 except IndexError:
                     try:
-                        if weight_map[i_s][j_s - 1][0] != -1 and j_s - 1 <= n - 1 and (j_s - 1) >= 0 and Map[i_s][j_s - 1][0] != 1:
+                        if weight_map[i_s][j_s - 1][0] != -1 and (j_s - 1) >= 0 and (j_s - 1) <= n -1 and weight_map[i_s][j_s - 1][0] > weight + 1:
                             weightadder()
                             j_s -= 1
                             for row in weight_map:
@@ -92,7 +92,7 @@ def weightadder():
     global j_s
     weight += 1
     #upwards
-    if (i_s - 1) > 0:
+    if (i_s - 1) >= 0:
         if weight_map[i_s - 1][j_s][0] > weight + 1:
             weight_map[i_s - 1][j_s][0] = weight
         elif weight_map[i_s - 1][j_s][0] < weight + 1:
@@ -101,7 +101,7 @@ def weightadder():
             weight_map[i_s - 1][j_s][0] = weight
 
     #left
-    if (j_s - 1) > 0:
+    if (j_s - 1) >= 0:
         if weight_map[i_s][j_s - 1][0] > weight +1:
             weight_map[i_s][j_s -1][0] = weight
         elif weight_map[i_s][j_s -1][0] < weight +1:
@@ -110,7 +110,7 @@ def weightadder():
             weight_map[i_s][j_s - 1][0] = weight
 
     #rigth
-    if (j_s + 1) < (n-1):
+    if (j_s + 1) <= (n-1):
         if weight_map[i_s][j_s + 1][0] > weight +1:
             weight_map[i_s][j_s + 1][0] = weight
         elif weight_map[i_s][j_s + 1][0] < weight + 1:
@@ -119,7 +119,7 @@ def weightadder():
             weight_map[i_s][j_s + 1][0] = weight
 
     #down
-    if (i_s + 1) < (n -1):
+    if (i_s + 1) <= (n -1):
         if weight_map[i_s + 1][j_s][0] > weight + 1:
             weight_map[i_s + 1][j_s][0] = weight
         elif weight_map[i_s + 1][j_s][0] < weight + 1:
@@ -135,14 +135,22 @@ def scan():
     global j_s
     global dest_pos
     global weight
-    for i in range(n-1, 0, -1):
-        for j in range(n-1, 0, -1):
+    global Map
+    global map_h
+    global Map_def
+    Map_def = [[ [] for i in range(n)] for j in range(n)]
+    for j in range(n):
+        for k in range(n):
+            Map_def[j][k].append(int(map_h[j][0][k]))
+    for i in range(n-1, -1, -1):
+        for j in range(n-1, -1, -1):
             if Map[i][j][0] == 0 and weight_map[i][j][0] !=(n*n+1) and weight_map[i][j] != 65:
                 print(i,j)
                 i_s = i
                 j_s = j
                 weight = weight_map[i][j][0]
                 print(weight)
+                print(Map)
                 return (i,j)
 
 
@@ -184,12 +192,17 @@ for line in range(len(map_text)):
 print(map_info)
 n = int(map_info[0][0])
 Map = [[ [] for i in range(n)] for j in range(n)]
+Map_def = [[ [] for i in range(n)] for j in range(n)]
 weight_map = [[ [] for i in range(n)] for j in range(n)]
 for x in range(n):
     map_h.append(map_info[3+x])
 for j in range(n):
     for k in range(n):
         Map[j][k].append(int(map_h[j][0][k]))
+for j in range(n):
+    for k in range(n):
+        Map_def[j][k].append(int(map_h[j][0][k]))
+print(Map_def)
 for i in range(n):
     for j in range(n):
         if Map[i][j][0] != 1:
