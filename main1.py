@@ -19,7 +19,7 @@ def find_path(starting_pos, dest_pos):
     for x in range(n):
         for y in range(n):
             total += int(Map[x][y][0])
-    if total != 1:
+    if total != n*n:
         try:
             if weight_map[i_s - 1][j_s][0] != -1 and (i_s - 1) >= 0 and (i_s - 1) <= n -1 and weight_map[i_s-1][j_s][0] > weight:
                 #after weight map 
@@ -80,11 +80,10 @@ def find_path(starting_pos, dest_pos):
                                 for row in Map:
                                     print(*row, sep="")
                                 Map[i_s][j_s][0] = 1
-                                start_pos = scan()
-                                if start_pos == 0:
+                                if scan() == 0:
                                     return
                                 else:
-                                    find_path(start_pos,dest_pos)
+                                    find_path(scan(),dest_pos)
                         finally:
                             pass
 
@@ -142,13 +141,17 @@ def scan():
     global Map
     global map_h
     global Map_def
+    total = int(0)
     Map_def = [[ [] for i in range(n)] for j in range(n)]
+    for x in range(n):
+        for y in range(n):
+            total += int(Map[x][y][0])
     for j in range(n):
         for k in range(n):
             Map_def[j][k].append(int(map_h[j][0][k]))
     for i in range(n-1, -1, -1):
         for j in range(n-1, -1, -1):
-            if Map[i][j][0] == 0 and weight_map[i][j][0] !=(n*n+1):
+            if Map[i][j][0] == 0 and weight_map[i][j][0] !=(n*n+1) and Map[i][j][0] != 1:
                 print(i,j)
                 i_s = i
                 j_s = j
@@ -156,8 +159,9 @@ def scan():
                 print(weight)
                 print(Map)
                 return (i,j)
-            else:
+            elif total == n*n:
                 return 0;
+
 
 
 
@@ -172,6 +176,7 @@ def print_path():
     path_lst = []
     path_lst.append((i_s,j_s))
     for x in range(weight_map[i_f][j_f][0]):
+        
         pass
 
 
@@ -196,7 +201,7 @@ def less_bloated_split(my_string, my_delimiter):
 
 #file_name = input('What file do you want to parse?: ')
 try:
-    with open("sample1.txt") as my_file:
+    with open("sample.txt") as my_file:
         map_text = my_file.readlines()
 except:
     print('File not found.')
@@ -245,5 +250,6 @@ total = int(0)
 find_path(start_pos,dest_pos)
 for row in weight_map:
     print(*row, sep="")
+print("\n")
 for row in Map:
     print(*row, sep="")
