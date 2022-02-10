@@ -19,7 +19,7 @@ def find_path(starting_pos, dest_pos):
     for x in range(n):
         for y in range(n):
             total += int(Map[x][y][0])
-    if total != 64:
+    if total != 1:
         try:
             if weight_map[i_s - 1][j_s][0] != -1 and (i_s - 1) >= 0 and (i_s - 1) <= n -1 and weight_map[i_s-1][j_s][0] > weight:
                 #after weight map 
@@ -80,7 +80,11 @@ def find_path(starting_pos, dest_pos):
                                 for row in Map:
                                     print(*row, sep="")
                                 Map[i_s][j_s][0] = 1
-                                find_path(scan(),dest_pos)
+                                start_pos = scan()
+                                if start_pos == 0:
+                                    return
+                                else:
+                                    find_path(start_pos,dest_pos)
                         finally:
                             pass
 
@@ -144,7 +148,7 @@ def scan():
             Map_def[j][k].append(int(map_h[j][0][k]))
     for i in range(n-1, -1, -1):
         for j in range(n-1, -1, -1):
-            if Map[i][j][0] == 0 and weight_map[i][j][0] !=(n*n+1) and weight_map[i][j] != 65:
+            if Map[i][j][0] == 0 and weight_map[i][j][0] !=(n*n+1):
                 print(i,j)
                 i_s = i
                 j_s = j
@@ -152,11 +156,25 @@ def scan():
                 print(weight)
                 print(Map)
                 return (i,j)
+            else:
+                return 0;
 
 
 
 
-def print_path(path):
+def print_path():
+    global dest_pos
+    global start_pos
+    i_f = int(dest_pos[0]);
+    j_f = int(dest_pos[1]);
+    i_s = int(start_pos[0])
+    j_s = int(start_pos[1])
+    path_lst = []
+    path_lst.append((i_s,j_s))
+    for x in range(weight_map[i_f][j_f][0]):
+        pass
+
+
     return 0;
 
 
@@ -178,7 +196,7 @@ def less_bloated_split(my_string, my_delimiter):
 
 #file_name = input('What file do you want to parse?: ')
 try:
-    with open("sample.txt") as my_file:
+    with open("sample1.txt") as my_file:
         map_text = my_file.readlines()
 except:
     print('File not found.')
