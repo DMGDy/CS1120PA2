@@ -1,5 +1,3 @@
-import WeightCheckExc
-
 def main():
     return 0;
 
@@ -21,7 +19,7 @@ def find_path(starting_pos, dest_pos):
     for x in range(n):
         for y in range(n):
             total += int(Map[x][y][0])
-    if total != n*n:
+    if total != n*n - 1:
         try:
             if weight_map[i_s - 1][j_s][0] != -1 and (i_s - 1) <= n - 1 and (i_s - 1) >= 0 and Map[i_s -1][j_s][0] != 1:
                 #after weight map 
@@ -34,8 +32,8 @@ def find_path(starting_pos, dest_pos):
 
                 find_path((i_s,j_s), dest_pos)
             else:
-                raise WeightCheckExc.InvalidMove1
-        except (IndexError, WeightCheckExc.InvalidMove1) as error:
+                raise IndexError
+        except IndexError:
             #move right
             try:
                 if weight_map[i_s][j_s + 1][0] != -1 and (j_s + 1) <= n - 1 and (j_s + 1) >= 0 and Map[i_s][j_s + 1][0] != 1:
@@ -48,9 +46,9 @@ def find_path(starting_pos, dest_pos):
 
                     find_path((i_s, j_s), dest_pos)
                 else:
-                    raise WeightCheckExc.InvalidMove2
+                    raise IndexError
                #move down
-            except (IndexError, WeightCheckExc.InvalidMove2) as error:
+            except IndexError:
                 try:
                     if weight_map[i_s + 1][j_s][0] != -1 and (i_s  + 1) <= n - 1 and (i_s + 1) >= 0 and Map[i_s + 1][j_s][0] != 1:
                         weightadder()
@@ -61,8 +59,8 @@ def find_path(starting_pos, dest_pos):
                             print(*row, sep="")
                         find_path((i_s, j_s), dest_pos)
                     else:
-                        raise WeightCheckExc.InvalidMove3
-                except (IndexError, WeightCheckExc.InvalidMove3) as error:
+                        raise IndexError
+                except IndexError:
                     try:
                         if weight_map[i_s][j_s - 1][0] != -1 and j_s - 1 <= n - 1 and (j_s - 1) >= 0 and Map[i_s][j_s - 1][0] != 1:
                             weightadder()
@@ -74,8 +72,8 @@ def find_path(starting_pos, dest_pos):
 
                             find_path((i_s, j_s), dest_pos)
                         else:
-                            raise WeightCheckExc.InvalidMove4
-                    except (IndexError, WeightCheckExc.InvalidMove4) as error:
+                            raise IndexError
+                    except IndexError:
                         try:
                                 for row in weight_map:
                                     print(*row, sep="")
@@ -214,3 +212,7 @@ for row in weight_map:
 
 total = int(0)
 find_path(start_pos,dest_pos)
+for row in weight_map:
+    print(*row, sep="")
+for row in Map:
+    print(*row, sep="")
