@@ -140,7 +140,6 @@ def scan():
     global weight
     global Map
     global map_h
-    global Map_def
     total = int(0)
     Map_def = [[ [] for i in range(n)] for j in range(n)]
     for x in range(n):
@@ -159,8 +158,7 @@ def scan():
                 print(weight)
                 print(Map)
                 return (i,j)
-            elif total == n*n:
-                return 0;
+    return 0;
 
 
 
@@ -234,7 +232,6 @@ for i in range(n):
             weight_map[i][j].append(-1)
 for row in Map:
     print(*row, sep="")
-pointer_map = [[ "" for i in range(n)] for j in range(n)]
 start_dest  = [map_info[1],map_info[2]]
 dest_pos    = tuple(start_dest[1])
 start_pos   = tuple(start_dest[0])
@@ -253,3 +250,4 @@ for row in weight_map:
 print("\n")
 for row in Map:
     print(*row, sep="")
+print(map_h)
