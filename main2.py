@@ -2,9 +2,12 @@ import structs
 def main():
     maze_map(create_map_info())
     print(StartEnd.starting_pos(), StartEnd.dest_pos())
-    NodeHead = structs.CurrentPosition(StartEnd.start_i,StartEnd.start_j,0)
+    NodeHead = structs.CurrentPosition(StartEnd.start_i,StartEnd.start_j,1)
 
     find_path(NodeHead)
+    f_weight_check(NodeHead)
+    f_weight_check(NodeHead)
+    visual_map()
 
 def find_path(NodeHead):
     completed = True
@@ -17,8 +20,6 @@ def find_path(NodeHead):
     while completed == False:
         #try moving up
         if valid_direction(NodeHead,"up") == True:
-            if DataMap[NodeHead.i - 1][NodeHead.j].weight < NodeHead.weight:
-                NodeHead.weigh = DataMap[NodeHead.i - 1][NodeHead.j].weight
             add_node_weight(NodeHead)
             NodeHead.i -= 1
             visual_map()
@@ -26,8 +27,6 @@ def find_path(NodeHead):
 
         #try moving right
         elif valid_direction(NodeHead,"right") == True:
-            if DataMap[NodeHead.i][NodeHead.j + 1].weight < NodeHead.weight:
-                NodeHead.weigh = DataMap[NodeHead.i][NodeHead.j + 1].weight
             add_node_weight(NodeHead)
             NodeHead.j += 1
             print("right")
@@ -36,8 +35,6 @@ def find_path(NodeHead):
 
         #try moving down
         elif valid_direction(NodeHead,"down") == True:
-            if DataMap[NodeHead.i + 1][NodeHead.j].weight < NodeHead.weight:
-                NodeHead.weigh = DataMap[NodeHead.i + 1][NodeHead.j].weight
             add_node_weight(NodeHead)
             NodeHead.i += 1
             visual_map()
@@ -45,8 +42,6 @@ def find_path(NodeHead):
 
         #try moving left
         elif valid_direction(NodeHead,"left") == True:
-            if DataMap[NodeHead.i][NodeHead.j - 1].weight < NodeHead.weight:
-                NodeHead.weigh = DataMap[NodeHead.i][NodeHead.j - 1].weight
             add_node_weight(NodeHead)
             NodeHead.j -= 1
             visual_map()
@@ -58,18 +53,14 @@ def find_path(NodeHead):
                 return
             else:
                 find_path(NodeHead)
-
-
-
-
 def add_node_weight(NodeHead):
-    NodeHead.weight += 1
+    NodeHead.weight = DataMap[NodeHead.i][NodeHead.j].weight
     #add weight to up
     if (NodeHead.i - 1) >= 0:
         if DataMap[NodeHead.i -1][NodeHead.j].weight < NodeHead.weight + 1:
             pass
         else:
-            DataMap[NodeHead.i - 1][NodeHead.j].weight = NodeHead.weight
+            DataMap[NodeHead.i - 1][NodeHead.j].weight = NodeHead.weight + 1
             DataMap[NodeHead.i - 1][NodeHead.j].i = NodeHead.i
             DataMap[NodeHead.i - 1][NodeHead.j].j = NodeHead.j
 
@@ -78,31 +69,34 @@ def add_node_weight(NodeHead):
         if DataMap[NodeHead.i][NodeHead.j + 1].weight < NodeHead.weight + 1:
             pass
         else:
-            DataMap[NodeHead.i][NodeHead.j + 1].weight = NodeHead.weight
+            DataMap[NodeHead.i][NodeHead.j + 1].weight = NodeHead.weight + 1
             DataMap[NodeHead.i][NodeHead.j + 1].i = NodeHead.i
+            DataMap[NodeHead.i][NodeHead.j + 1].j = NodeHead.j
 
     #add weight to down
     if (NodeHead.i + 1) <= (n - 1):
         if DataMap[NodeHead.i + 1][NodeHead.j].weight < NodeHead.weight + 1:
             pass
         else:
-            DataMap[NodeHead.i + 1][NodeHead.j].weight = NodeHead.weight
+            DataMap[NodeHead.i + 1][NodeHead.j].weight = NodeHead.weight +1
             DataMap[NodeHead.i + 1][NodeHead.j].i = NodeHead.i
             DataMap[NodeHead.i + 1][NodeHead.j].j = NodeHead.j
 
 
-    #add weight left and create pointer coord to Nodehead
+    #add weight left and create pointer coord to NodeHead
     if (NodeHead.j - 1) >= 0:
         if DataMap[NodeHead.i][NodeHead.j - 1].weight < NodeHead.weight + 1:
             pass
         else:
-            DataMap[NodeHead.i][NodeHead.j - 1].weight = NodeHead.weight
+            DataMap[NodeHead.i][NodeHead.j - 1].weight = NodeHead.weight + 1
             DataMap[NodeHead.i][NodeHead.j - 1].i = NodeHead.i
             DataMap[NodeHead.i][NodeHead.j - 1].j = NodeHead.j
 
 
     #mark that present node has been explored
     DataMap[NodeHead.i][NodeHead.j].beenTo = 1
+def print_path():
+    print(path)
 
 def valid_direction(NodeHead, direction):
     if direction == "up":
@@ -152,7 +146,7 @@ def backtrack(NodeHead):
 
 def create_map_info():
     try:
-        with open("sample.txt") as my_file:
+        with open("sample5.txt") as my_file:
             raw_text = my_file.readlines()
     except:
         print('File not found.')
@@ -171,6 +165,54 @@ def refresh_nodes():
                 DataMap[x][y].beenTo = 1
             else:
                 DataMap[x][y].beenTo = 0
+def weight_check(NodeHead):
+    #check if weight above is lower
+    if (NodeHead.i - 1) >= 0:
+        if DataMap[NodeHead.i - 1][NodeHead.j].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i - 1][NodeHead.j].weight != -1:
+            if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i - 1][NodeHead.j].weight > 1:
+                DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i - 1][NodeHead.j].weight + 1
+                DataMap[NodeHead.i][NodeHead.j].i = NodeHead.i - 1
+                DataMap[NodeHead.i][NodeHead.j].j = NodeHead.j
+
+    #check if weight to right is lower
+    if (NodeHead.j + 1) <= n - 1:
+        if DataMap[NodeHead.i][NodeHead.j + 1].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i][NodeHead.j + 1].weight != -1:
+            if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i][NodeHead.j + 1].weight > 1:
+                DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i][NodeHead.j + 1].weight + 1
+    #check if weight below is lower
+    if (NodeHead.i + 1) <= n - 1:
+        if DataMap[NodeHead.i + 1][NodeHead.j].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i + 1][NodeHead.j].weight != -1:
+            if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i + 1][NodeHead.j].weight > 1:
+                DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i + 1][NodeHead.j].weight + 1
+    #check if weight to left is lower
+    if (NodeHead.j - 1) >= 0:
+        if DataMap[NodeHead.i][NodeHead.j - 1].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i][NodeHead.j - 1].weight != -1:
+            if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i][NodeHead.j - 1].weight > 1:
+                DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i][NodeHead.j - 1].weight + 1
+
+    return 0;
+
+
+def f_weight_check(NodeHead):
+    for x in range(n):
+        for y in range(n):
+            if DataMap[x][y].weight != -1:
+                NodeHead.i = x
+                NodeHead.j = y
+                weight_check(NodeHead)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -197,26 +239,10 @@ def maze_map(map_info):
 
     return DataMap, StartEnd, n;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def visual_map():
     for x in range(n):
         for y in range(n):
-            print(DataMap[x][y].weight, end=" | ")
+            print(str(DataMap[x][y].beenTo).center(3), end="|")
         print()
     print()
     return 0;

@@ -199,7 +199,7 @@ def less_bloated_split(my_string, my_delimiter):
 
 #file_name = input('What file do you want to parse?: ')
 try:
-    with open("sample.txt") as my_file:
+    with open("sample5.txt") as my_file:
         map_text = my_file.readlines()
 except:
     print('File not found.')
