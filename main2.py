@@ -146,7 +146,7 @@ def backtrack(NodeHead):
 
 def create_map_info():
     try:
-        with open("sample5.txt") as my_file:
+        with open("sample.txt") as my_file:
             raw_text = my_file.readlines()
     except:
         print('File not found.')
@@ -158,13 +158,6 @@ def create_map_info():
     return map_info
 
 
-def refresh_nodes():
-    for x in range(n):
-        for y in range(n):
-            if maze_map[x][y] == "1":
-                DataMap[x][y].beenTo = 1
-            else:
-                DataMap[x][y].beenTo = 0
 def weight_check(NodeHead):
     #check if weight above is lower
     if (NodeHead.i - 1) >= 0:
@@ -179,17 +172,23 @@ def weight_check(NodeHead):
         if DataMap[NodeHead.i][NodeHead.j + 1].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i][NodeHead.j + 1].weight != -1:
             if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i][NodeHead.j + 1].weight > 1:
                 DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i][NodeHead.j + 1].weight + 1
+                DataMap[NodeHead.i][NodeHead.j].i = NodeHead.i
+                DataMap[NodeHead.i][NodeHead.j].j = NodeHead.j + 1
+
     #check if weight below is lower
     if (NodeHead.i + 1) <= n - 1:
         if DataMap[NodeHead.i + 1][NodeHead.j].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i + 1][NodeHead.j].weight != -1:
             if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i + 1][NodeHead.j].weight > 1:
                 DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i + 1][NodeHead.j].weight + 1
+                DataMap[NodeHead.i][NodeHead.j].i = NodeHead.i + 1
+                DataMap[NodeHead.i][NodeHead.j].j = NodeHead.j
     #check if weight to left is lower
     if (NodeHead.j - 1) >= 0:
         if DataMap[NodeHead.i][NodeHead.j - 1].weight + 1 < DataMap[NodeHead.i][NodeHead.j].weight and DataMap[NodeHead.i][NodeHead.j - 1].weight != -1:
             if DataMap[NodeHead.i][NodeHead.j].weight - DataMap[NodeHead.i][NodeHead.j - 1].weight > 1:
                 DataMap[NodeHead.i][NodeHead.j].weight = DataMap[NodeHead.i][NodeHead.j - 1].weight + 1
-
+                DataMap[NodeHead.i][NodeHead.j].i = NodeHead.i
+                DataMap[NodeHead.i][NodeHead.j].j = NodeHead.j - 1
     return 0;
 
 
@@ -242,7 +241,7 @@ def maze_map(map_info):
 def visual_map():
     for x in range(n):
         for y in range(n):
-            print(str(DataMap[x][y].beenTo).center(3), end="|")
+            print("("+str(DataMap[x][y].i)+","+str(DataMap[x][y].j)+")", end="|")
         print()
     print()
     return 0;
