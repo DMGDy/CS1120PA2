@@ -158,7 +158,7 @@ def backtrack(NodeHead):
 
 def create_map_info():
     try:
-        with open("sample4.txt") as my_file:
+        with open("sample.txt") as my_file:
             raw_text = my_file.readlines()
     except:
         print('File not found.')
