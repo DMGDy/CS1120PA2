@@ -1,13 +1,13 @@
 import structs
 def main():
     maze_map(create_map_info())
-    print(StartEnd.starting_pos(), StartEnd.dest_pos())
     NodeHead = structs.CurrentPosition(StartEnd.start_i,StartEnd.start_j,1)
 
     find_path(NodeHead)
     f_weight_check(NodeHead)
     f_weight_check(NodeHead)
     visual_map()
+    print(print_path())
 
 def find_path(NodeHead):
     completed = True
@@ -96,7 +96,19 @@ def add_node_weight(NodeHead):
     #mark that present node has been explored
     DataMap[NodeHead.i][NodeHead.j].beenTo = 1
 def print_path():
-    print(path)
+    return_list = []
+    if DataMap[StartEnd.end_i][StartEnd.end_j].i == 0 and DataMap[StartEnd.end_i][StartEnd.end_j].j == 0:
+        return []
+    temp_head = structs.CurrentPosition(StartEnd.end_i, StartEnd.end_j,0)
+    temp_head2 = structs.CurrentPosition(StartEnd.start_i, StartEnd.start_j,0)
+    while temp_head.i != temp_head2.i or temp_head.j != temp_head2.j:
+        temp_head.i,temp_head.j = DataMap[temp_head.i][temp_head.j].i, DataMap[temp_head.i][temp_head.j].j
+        return_list.append((temp_head.i,temp_head.j))
+    return_list.reverse()
+    return_list.append((StartEnd.end_i,StartEnd.end_j))
+
+    return return_list
+
 
 def valid_direction(NodeHead, direction):
     if direction == "up":
@@ -146,7 +158,7 @@ def backtrack(NodeHead):
 
 def create_map_info():
     try:
-        with open("sample.txt") as my_file:
+        with open("sample4.txt") as my_file:
             raw_text = my_file.readlines()
     except:
         print('File not found.')
@@ -199,6 +211,7 @@ def f_weight_check(NodeHead):
                 NodeHead.i = x
                 NodeHead.j = y
                 weight_check(NodeHead)
+
 
 
 
