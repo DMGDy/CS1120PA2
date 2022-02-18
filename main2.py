@@ -45,7 +45,7 @@ def find_path(NodeHead):
             find_path(NodeHead)
 def add_node_weight(NodeHead):
     NodeHead.weight = DataMap[NodeHead.i][NodeHead.j].weight
-    #add weight to up
+    #add weight up and create pointer cood to NodeHead
     if (NodeHead.i - 1) >= 0:
         if DataMap[NodeHead.i -1][NodeHead.j].weight < NodeHead.weight + 1:
             pass
@@ -54,7 +54,7 @@ def add_node_weight(NodeHead):
             DataMap[NodeHead.i - 1][NodeHead.j].i = NodeHead.i
             DataMap[NodeHead.i - 1][NodeHead.j].j = NodeHead.j
 
-    #add weght to rigth
+    #add weght to rigth create pointer coord to NodeHead
     if (NodeHead.j + 1) <= (n - 1):
         if DataMap[NodeHead.i][NodeHead.j + 1].weight < NodeHead.weight + 1:
             pass
@@ -62,8 +62,7 @@ def add_node_weight(NodeHead):
             DataMap[NodeHead.i][NodeHead.j + 1].weight = NodeHead.weight + 1
             DataMap[NodeHead.i][NodeHead.j + 1].i = NodeHead.i
             DataMap[NodeHead.i][NodeHead.j + 1].j = NodeHead.j
-
-    #add weight to down
+    #add weight to down create pointer coord to NodeHead
     if (NodeHead.i + 1) <= (n - 1):
         if DataMap[NodeHead.i + 1][NodeHead.j].weight < NodeHead.weight + 1:
             pass
@@ -87,8 +86,10 @@ def add_node_weight(NodeHead):
     DataMap[NodeHead.i][NodeHead.j].beenTo = 1
 def print_path():
     return_list = []
+    #if not path was found return empty list
     if DataMap[StartEnd.end_i][StartEnd.end_j].i == 0 and DataMap[StartEnd.end_i][StartEnd.end_j].j == 0:
         return []
+    #create 2 nodeheads, follow pointer coord until they are at both at the start
     temp_head = structs.CurrentPosition(StartEnd.end_i, StartEnd.end_j,0)
     temp_head2 = structs.CurrentPosition(StartEnd.start_i, StartEnd.start_j,0)
     while temp_head.i != temp_head2.i or temp_head.j != temp_head2.j:
@@ -101,6 +102,7 @@ def print_path():
 
 
 def valid_direction(NodeHead, direction):
+    #checks if move is valid, where movement is not a water or a visted node
     if direction == "up":
         if (NodeHead.i - 1) >= 0:
             if DataMap[NodeHead.i - 1][NodeHead.j].weight != -1 and DataMap[NodeHead.i -1][NodeHead.j].beenTo == 0:
@@ -206,23 +208,6 @@ def f_weight_check(NodeHead):
                 NodeHead.i = x
                 NodeHead.j = y
                 weight_check(NodeHead)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def maze_map(map_info):
     global DataMap, StartEnd, n, maze_map
     maze_map = []
@@ -242,7 +227,6 @@ def maze_map(map_info):
     StartEnd = structs.StartDest(int(map_info[1][0]), int(map_info[1][1]),int(map_info[2][0]),int(map_info[2][1]))
     DataMap[StartEnd.start_i][StartEnd.start_j].weight = 0
     DataMap[StartEnd.start_i][StartEnd.start_j].beenTo = 0
-
 
     return DataMap, StartEnd, n;
 
