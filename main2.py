@@ -5,7 +5,7 @@ def main():
 
     find_path(NodeHead)
     f_weight_check(NodeHead)
-    visual_map()
+    #visual_map()
     print(print_path())
 
 def find_path(NodeHead):
@@ -13,33 +13,32 @@ def find_path(NodeHead):
     if valid_direction(NodeHead,"up") == True:
         add_node_weight(NodeHead)
         NodeHead.i -= 1
-        visual_map()
+        #visual_map()
         find_path(NodeHead)
 
     #try moving right
     elif valid_direction(NodeHead,"right") == True:
         add_node_weight(NodeHead)
         NodeHead.j += 1
-        print("right")
-        visual_map()
+        #visual_map()
         find_path(NodeHead)
 
     #try moving down
     elif valid_direction(NodeHead,"down") == True:
         add_node_weight(NodeHead)
         NodeHead.i += 1
-        visual_map()
+        #visual_map()
         find_path(NodeHead)
 
     #try moving left
     elif valid_direction(NodeHead,"left") == True:
         add_node_weight(NodeHead)
         NodeHead.j -= 1
-        visual_map()
+        #visual_map()
         find_path(NodeHead)
     else:
         DataMap[NodeHead.i][NodeHead.j].beenTo = 1
-        visual_map()
+        #visual_map()
         if backtrack(NodeHead) == 0:
             return
         else:
@@ -154,18 +153,15 @@ def create_map_info():
     except:
         print('File not found.')
         exit()
-    print(raw_text)
     for elm in range(len(raw_text)):
         if "\n" not in raw_text[elm]:
             raw_text[elm] += "\n"
-    print(raw_text)
 
     map_info, holder = [], []
     for line in range(len(raw_text)):
         holder = structs.less_bloated_split(raw_text[line]," ")
         map_info.append(holder)
 
-    print(map_info)
     return map_info
 
 
